@@ -550,6 +550,56 @@ d3.json("GeojsonData/NaturalDisasters.json")
 
 
 ////////////////////////////////////
+// BEGIN 8 - NATIONAL PARKS LAYER
+////////////////////////////////////
+let NationalParksPoints = new L.layerGroup();
+
+d3.json("GeojsonData/NationalParksFinalUpdate.json")
+.then(
+    function(NationalParksData){
+        // console log to make sure the data loaded
+        console.log(NationalParksData);
+               
+                // add on to the style for each data point
+                function dataStyle(feature)
+                {
+                    return {
+                        opacity: 0.5,
+                        fillOpacity: 0.5,
+                        fillColor: "green", // use index 2 for the depth
+                        color: "000000", // black outline
+                        radius: 5, // 
+                        weight: 0.5,
+                        stroke: true
+                    }
+                }
+        L.geoJson(NationalParksData, {
+            // make each feature a marker that is on the map, each marker is a circle
+            pointToLayer: function(feature, latLng) {
+                return L.circleMarker(latLng);
+            },
+            // set the style for each marker
+            style: dataStyle, // calls the data style function 
+            onEachFeature: function(feature, layer){
+                layer.bindPopup(`
+                                Park Name: <b>${feature.properties.Name}</b>`);
+            }
+        }).addTo(NationalParksPoints);
+        //NationalParksPoints.addTo(myMap);    
+
+    });
+////////////////////////////////////
+// END 8 - NATIONAL PARKS LAYER
+////////////////////////////////////
+
+
+
+
+
+
+
+
+////////////////////////////////////
 // BEGIN - LAYER OVERLAY DEFINITION
 ////////////////////////////////////
 // add each layer to the map
@@ -562,6 +612,7 @@ let overlays = {
     "Weather Data": weatherpoints,
     "Income Data": IncomePoints,
     "Natural Disaster Data": NaturalDisasterPoints,
+    "National Parks Data": NationalParksPoints
 };
 // add the Layer control
 L.control
@@ -716,5 +767,13 @@ myMap.on('overlayadd', function (eventLayer) {
         this.removeControl(incomeLegend);
         this.removeControl(earthquakeLegend);
         naturalDisastersLegend.addTo(this);
+    } else {
+        this.removeControl(dogLegend);
+        this.removeControl(happiestCitiesLegend);
+        this.removeControl(interGenLegend);
+        this.removeControl(weatherLegend);
+        this.removeControl(incomeLegend);
+        this.removeControl(earthquakeLegend);
+        this.removeControl(naturalDisastersLegend);
     }
 });
