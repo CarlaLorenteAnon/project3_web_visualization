@@ -479,7 +479,7 @@ d3.json("GeojsonData/incomeUpdated.json")
 ////////////////////////////////////
 let NaturalDisasterPoints = new L.layerGroup();
 
-d3.json("GeojsonData/NaturalDisasters.json")
+d3.json("GeojsonData/naturalDisasters.json")
 .then(
     function(NaturalDisasterData){
         // console log to make sure the data loaded
