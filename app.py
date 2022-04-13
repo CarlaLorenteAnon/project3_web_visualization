@@ -4,7 +4,8 @@ import os
 import numpy as np
 import json
 import pandas as pd
-from decimal import Decimal 
+from decimal import Decimal
+from flask-cors import CORS 
 
 
 
@@ -28,6 +29,7 @@ app = Flask(__name__)
 ###################################
 
 @app.route("/")
+@cross_origin
 def welcome():
     '''List Available API Routes'''
     return(
@@ -45,6 +47,7 @@ def welcome():
 
 
 @app.route("/api/v1.0/zip-populations")
+@cross_origin
 def zip_pops():
     # Create our session (link) from Python to the DB
 
@@ -54,6 +57,7 @@ def zip_pops():
     return result
 
 @app.route("/api/v1.0/populations-latlongs")
+@cross_origin
 
 def poplocs():
     
@@ -63,6 +67,7 @@ def poplocs():
 
 
 @app.route("/api/v1.0/petfriendly-rankings")
+@cross_origin
 def pets():
     data = engine.execute('SELECT mastercity.primary_city, mastercity.latitude, mastercity.longitude, dogfriendly.overall_rank FROM mastercity INNER JOIN dogfriendly ON mastercity.primary_city=dogfriendly.city ORDER BY dogfriendly.overall_rank ASC')
     '''data2 = pd.DataFrame(data)
@@ -80,12 +85,14 @@ def pets():
     return result
 
 @app.route("/api/v1.0/happiest-cities")
+@cross_origin
 def happy():
   data = engine.execute('SELECT mastercity.primary_city, happiestcities.overall_rank, happiestcities.emotional_physical, happiestcities.income_employment, happiestcities.community_environment, mastercity.latitude, mastercity.longitude FROM mastercity INNER JOIN happiestcities ON mastercity.primary_city=happiestcities.city;')
   result =json.dumps([dict(r) for r in data])
   return result
 
 @app.route('/api/v1.0/income-and-population')
+@cross_origin
 def income():
   data = engine.execute('''SELECT zips.primary_city, income_and_population.zipcode, income_and_population.avg_income, income_and_population.total_pop
     FROM zips
@@ -95,6 +102,7 @@ def income():
   return result
 
 @app.route('/api/v1.0/number-disasters-by-state')
+@cross_origin
 def disasters():
   data = engine.execute('''SELECT state, count(fy_declared) as disasters
       FROM naturaldisasters
@@ -104,6 +112,7 @@ def disasters():
 
 # New App Route Placeholder for Intergenerational Mobility
 @app.route('/api/v1.0/IntergenerationalMobility')
+@cross_origin
 def IntergenerationalMobility():
   data = engine.execute('''SELECT cbsa.ZipCode,im.AbsoluteUpwardMobility,zips.Latitude,zips.Longitude
       FROM IntergenerationalMobility im 
