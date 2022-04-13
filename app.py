@@ -5,7 +5,7 @@ import numpy as np
 import json
 import pandas as pd
 from decimal import Decimal
-from flask-cors import CORS 
+from flask_cors import CORS 
 
 
 
